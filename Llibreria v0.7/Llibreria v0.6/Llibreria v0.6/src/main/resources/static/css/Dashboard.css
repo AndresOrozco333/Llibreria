@@ -1,0 +1,80 @@
+/* Estilo base del sidebar */
+.sidebar {
+  background-color: #3e7774;
+  min-height: 100vh;
+  padding: 1rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar h5 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar a {
+  display: block;
+  padding: 0.5rem;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+}
+
+.sidebar a:hover {
+  background-color: #2e5e5c;
+  border-radius: 4px;
+}
+
+/* Imagen de perfil */
+.perfil-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid white;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Contenedor de perfil en el sidebar */
+.perfil-sidebar {
+  text-align: center;
+}
+
+/* Botón de cerrar sesión */
+.logout {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.logout:hover {
+  background-color: red;
+  color: white;
+  border-color: red;
+}
+
+/* Tarjetas */
+.card-stat {
+  padding: 1rem;
+  color: white;
+  text-align: center;
+  font-size: 1.2rem;
+  border-radius: 10px;
+}
+
+/* Tabla */
+.table th, .table td {
+  vertical-align: middle !important;
+  text-align: center;
+}
+
+/* Header de la tabla */
+.card-header {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
