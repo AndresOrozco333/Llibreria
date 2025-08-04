@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h2 class="mb-4">Registro de Usuario</h2>
+
+    <form id="formRegistro" class="border p-4 bg-white shadow-sm rounded">
+        <div class="mb-3">
+            <label for="username" class="form-label">Nombre de usuario</label>
+            <input type="text" class="form-control" id="username" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre completo</label>
+            <input type="text" class="form-control" id="nombre" required>
+        </div>
+	
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="rol" class="form-label">Rol</label>
+			<select id="rol" class="form-select">
+			    <option value="USUARIO" selected>USUARIO</option>
+			    <option value="ADMIN">ADMIN</option>
+			    <option value="SOPORTE">SOPORTE</option>
+			    <option value="INVITADO">INVITADO</option>
+			</select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+
+    <div id="respuesta" class="mt-3"></div>
+</div>
+
+<script>
+    document.getElementById("formRegistro").addEventListener("submit", function (e) {
+        e.preventDefault();
+    
+        const data = {
+            username: document.getElementById("username").value,
+            nombre: document.getElementById("nombre").value,
+            password: document.getElementById("password").value,
+            rol: document.getElementById("rol").value
+        };
+    
+        fetch("/registro", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Registro fallido");
+            return res.text();
+        })
+        .then(texto => {
+            document.getElementById("respuesta").innerHTML =
+                `<div class="alert alert-success">${texto}<br>Redirigiendo al login...</div>`;
+            setTimeout(() => {
+                window.location.href = "/login.html";
+            }, 2000);
+        })
+        .catch(err => {
+            document.getElementById("respuesta").innerHTML =
+                `<div class="alert alert-danger">Error: ${err.message}</div>`;
+            console.error(err);
+        });
+    });
+</script>
+
+</body>
+</html>
