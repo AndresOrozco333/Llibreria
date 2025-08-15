@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Subir Excel - Librería</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h3 class="mb-3">Cargar Excel de Libros</h3>
+
+    <form id="uploadForm" class="mb-3">
+      <div class="row g-2 align-items-center">
+        <div class="col-auto">
+          <input class="form-control" type="file" id="file" accept=".xlsx,.xls" required />
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-primary" type="submit">Subir y mostrar</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="alert" class="alert d-none" role="alert"></div>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle" id="tabla">
+        <thead class="table-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th class="text-end">Precio</th>
+            <th style="width:160px">Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+  // ----- Estado en memoria -----
+  let filas = [];        // [{nombre, categoria, precio}]
+  let editIndex = null;  // índice que se está editando
+
+  // Lee token CSRF de la cookie (si usas CookieCsrfTokenRepository)
+  function getCookie(name){
+    return document.cookie.split('; ')
+      .map(v => v.split('='))
+      .reduce((acc,[k,v]) => k===name ? decodeURIComponent(v) : acc, null);
+  }
+
+  // ----- Render -----
+  const tbody = document.querySelector('#tabla tbody');
+  function render() {
+    tbody.innerHTML = '';
+    filas.forEach((r, i) => {
+      const tr = document.createElement('tr');
+
+      if (editIndex === i) {
+        tr.innerHTML = `
+          <td><input id="e-nombre" class="form-control form-control-sm" value="${escapeHtml(r.nombre)}"></td>
+          <td><input id="e-categoria" class="form-control form-control-sm" value="${escapeHtml(r.categoria)}"></td>
+          <td class="text-end">
+            <input id="e-precio" type="number" step="0.01" class="form-control form-control-sm text-end" value="${Number(r.precio).toFixed(2)}">
+          </td>
+          <td>
+            <button class="btn btn-success btn-sm me-1" data-action="save" data-i="${i}">Guardar</button>
+            <button class="btn btn-secondary btn-sm" data-action="cancel">Cancelar</button>
+          </td>
+        `;
+      } else {
+        tr.innerHTML = `
+          <td>${escapeHtml(r.nombre)}</td>
+          <td>${escapeHtml(r.categoria)}</td>
+          <td class="text-end">${Number(r.precio).toFixed(2)}</td>
+          <td>
+            <button class="btn btn-warning btn-sm me-1" data-action="edit" data-i="${i}">Editar</button>
+            <button class="btn btn-danger btn-sm" data-action="delete" data-i="${i}">Eliminar</button>
+          </td>
+        `;
+      }
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Seguridad mínima para HTML
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[m]));
+  }
+
+  // ----- Eventos de acciones -----
+  tbody.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const i = Number(btn.dataset.i);
+
+    if (action === 'edit') {
+      editIndex = i;
+      render();
+    } else if (action === 'delete') {
+      filas.splice(i, 1);
+      if (editIndex === i) editIndex = null;
+      render();
+    } else if (action === 'save') {
+      const nombre = document.getElementById('e-nombre').value.trim();
+      const categoria = document.getElementById('e-categoria').value.trim();
+      const precio = parseFloat(document.getElementById('e-precio').value.replace(',', '.')) || 0;
+      filas[i] = { nombre, categoria, precio };
+      editIndex = null;
+      render();
+    } else if (action === 'cancel') {
+      editIndex = null;
+      render();
+    }
+  });
+
+  // ----- Upload -----
+  const form = document.getElementById('uploadForm');
+  const alertBox = document.getElementById('alert');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertBox.className = 'alert d-none'; alertBox.textContent = '';
+    editIndex = null;
+
+    const file = document.getElementById('file').files[0];
+    if (!file) return;
+
+    const fd = new FormData();
+    fd.append('file', file);
+
+    const headers = {};
+    const xsrf = getCookie('XSRF-TOKEN');
+    if (xsrf) headers['X-XSRF-TOKEN'] = xsrf;
+
+    try {
+      const res = await fetch('/api/excel/upload', { method: 'POST', body: fd, headers });
+      if (!res.ok) throw new Error('Error ' + res.status);
+      filas = await res.json();
+      render();
+
+      if (filas.length === 0) {
+        alertBox.className = 'alert alert-warning';
+        alertBox.textContent = 'El archivo no contiene filas.';
+      }
+    } catch (err) {
+      alertBox.className = 'alert alert-danger';
+      alertBox.textContent = 'No se pudo procesar el Excel: ' + err.message;
+    }
+  });
+</script>
+</body>
+</html>
