@@ -1,0 +1,158 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.sidebar {
+  background-color: #3e7774;
+  height: 100vh;
+  padding: 1rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: width 0.3s ease, padding 0.3s ease;
+  width: 220px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 50px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.sidebar.collapsed .perfil-sidebar,
+.sidebar.collapsed a,
+.sidebar.collapsed form {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  transition: opacity 0.2s ease, height 0.2s ease;
+}
+
+.hamburguesa-contenedor {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+#toggleSidebar {
+  font-size: 24px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  color: white;
+  cursor: pointer;
+}
+
+.sidebar.collapsed .hamburguesa-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  margin-bottom: 0;
+}
+
+.sidebar.collapsed #toggleSidebar {
+  text-align: center;
+  padding: 0;
+}
+
+#mainContent {
+  margin-left: 220px;
+  transition: margin-left 0.3s ease;
+}
+
+#mainContent.expanded {
+  margin-left: 50px;
+}
+
+.perfil-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #274a48;
+  display: block;
+  margin: 0 auto;
+}
+
+.perfil-sidebar {
+  text-align: center;
+}
+
+.sidebar h5 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar a {
+  display: block;
+  padding: 0.5rem;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+}
+
+.sidebar a:hover {
+  background-color: #2e5e5c;
+  border-radius: 4px;
+}
+
+.logout {
+  background-color: transparent;
+  color: white;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.logout:hover {
+  background-color: red;
+  color: white;
+  border-color: red;
+}
+
+/* Tarjetas */
+.card-stat {
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  transition: transform 0.3s, filter 0.3s;
+}
+
+.bg-intercalado.verde {
+  background-color: #3e7774;
+  color: white;
+}
+
+.bg-intercalado.verde:hover {
+  filter: brightness(85%);
+  transform: scale(1.05);
+}
+
+.bg-intercalado.blancogris {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.bg-intercalado.blancogris:hover {
+  background-color: #dcdcdc;
+  transform: scale(1.05);
+}
+
+.table th, .table td {
+  vertical-align: middle !important;
+  text-align: center;
+}
+
+.card-header {
+  font-weight: bold;
+  font-size: 1.1rem;
+}

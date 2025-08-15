@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Libros - L-Librería</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/Libros.css">
+</head>
+<body>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebar" class="col-md-2 sidebar d-flex flex-column justify-content-between">
+      <div>
+        <div class="hamburguesa-contenedor">
+          <button id="toggleSidebar">&#9776;</button>
+        </div>
+
+        <div class="perfil-sidebar mb-3 text-center">
+          <img src="img/foto predeterminado.png" alt="Foto de perfil" class="perfil-img">
+          <h5 class="mt-2">L-Librería</h5>
+        </div>
+
+        <a href="admin/Dashboard_Administrativo.html">Dashboard</a>
+        <a href="Perfil.html">Perfil</a>
+        <a href="#">Crear Libros</a>
+        <a href="Libros.html">Libros</a>
+        <a href="#">Categorías</a>
+        <a href="#">Usuarios</a>
+      </div>
+      <div class="mb-3 text-center">
+        <form method="POST" action="/logout">
+          <button type="submit" class="btn logout">Cerrar sesión</button>
+        </form>
+      </div>
+    </nav>
+
+    <main id="mainContent" class="col-md-10 offset-md-2 p-4">
+      <h1 class="mb-4 text-center">Libros</h1>
+
+      <div class="mb-4 text-end">
+        <button class="btn btn-success" id="btnAgregarLibro">Agregar libro</button>
+      </div>
+
+      <div class="row" id="librosContenedor"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+  const toggleSidebar = document.getElementById("toggleSidebar");
+  const sidebar = document.getElementById("sidebar");
+  const mainContent = document.getElementById("mainContent");
+
+  toggleSidebar.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+    mainContent.classList.toggle("expanded");
+  });
+
+  document.getElementById('btnAgregarLibro').addEventListener('click', function () {
+    alert("Funcionalidad de agregar libro pendiente de implementación.");
+  });
+
+  async function cargarLibros() {
+    const contenedor = document.getElementById("librosContenedor");
+    contenedor.innerHTML = "";
+
+    try {
+      const respuesta = await fetch("http://localhost:8080/api/libros");
+      const libros = await respuesta.json();
+
+      libros.forEach(libro => {
+        const nombreImagen = libro.titulo
+          .toLowerCase()
+          .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          .replace(/\s+/g, "_")
+          .replace(/[^a-z0-9_]/g, "");
+
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "col-12 col-sm-6 col-md-4 col-lg-3 mb-4";
+        tarjeta.innerHTML = `
+          <div class="card h-100 shadow libro-card">
+            <img src="img/libros/${nombreImagen}.jpg" class="card-img-top" alt="${libro.titulo}">
+            <div class="card-body">
+              <h5 class="card-title">${libro.titulo}</h5>
+              <p class="card-text">${libro.descripcion}</p>
+            </div>
+          </div>
+        `;
+        contenedor.appendChild(tarjeta);
+      });
+    } catch (error) {
+      contenedor.innerHTML = "<p class='text-danger'>Error al cargar libros.</p>";
+      console.error(error);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", cargarLibros);
+</script>
+
+</body>
+</html>
