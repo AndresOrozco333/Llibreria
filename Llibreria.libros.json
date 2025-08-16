@@ -1,0 +1,72 @@
+[{
+  "_id": {
+    "$oid": "688a250d671dfa913729f057"
+  },
+  "titulo": "El Principito",
+  "autor": "Antoine de Saint-Exupéry",
+  "anio": 1943,
+  "descripcion": "Una historia poética y filosófica sobre un pequeño príncipe que viaja por planetas.",
+  "archivo": {
+    "nombre": "el_principito.pdf",
+    "tipo": "application/pdf",
+    "portada": "principito.jpg"
+  },
+  "subido_por": "usuario@example.com",
+  "fecha_subida": {
+    "$date": "2025-07-28T12:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "688a316a671dfa913729f058"
+  },
+  "titulo": "Warhammer 40K: Eisenhorn",
+  "autor": "Dan Abnett",
+  "anio": 2001,
+  "descripcion": "Sigue al inquisidor Gregor Eisenhorn mientras combate herejías, cultos y amenazas del Caos.",
+  "archivo": {
+    "nombre": "eisenhorn.pdf",
+    "tipo": "application/pdf",
+    "portada": "eisenhorn.jpg"
+  },
+  "subidoPor": "usuario@example.com",
+  "fechaSubida": {
+    "$date": "2025-07-30T10:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "688a316a671dfa913729f059"
+  },
+  "titulo": "El Nombre del Viento",
+  "autor": "Patrick Rothfuss",
+  "anio": 2007,
+  "descripcion": "Kvothe narra su vida desde niño prodigio en magia y música hasta su búsqueda del nombre del viento.",
+  "archivo": {
+    "nombre": "nombre_del_viento.pdf",
+    "tipo": "application/pdf",
+    "portada": "nombre_del_viento.jpg"
+  },
+  "subidoPor": "usuario@example.com",
+  "fechaSubida": {
+    "$date": "2025-07-30T10:10:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "688a316a671dfa913729f05a"
+  },
+  "titulo": "Mistborn: El Imperio Final",
+  "autor": "Brandon Sanderson",
+  "anio": 2006,
+  "descripcion": "En un mundo cubierto de ceniza y dominado por el Lord Legislador, Vin, iniciada en alomancia, lidera una rebelión.",
+  "archivo": {
+    "nombre": "imperio_final.pdf",
+    "tipo": "application/pdf",
+    "portada": "mistborn.jpg"
+  },
+  "subidoPor": "usuario@example.com",
+  "fechaSubida": {
+    "$date": "2025-07-30T10:20:00.000Z"
+  }
+}]
